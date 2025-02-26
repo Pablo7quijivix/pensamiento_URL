@@ -1,0 +1,32 @@
+'''
+El programa debe ser capaz de verificar si la cantidad ingresada es de 5 dígitos, luego ordenar los 5 
+dígitos de forma ascendente y descendente.
+
+El programa muestra en forma ascendente: 5,5,7,8,9
+el programa muestra en forma descendente: 9,8,7,5,5
+'''
+
+def ordenar_numero(numero):
+    """Ordena un número de 5 dígitos en orden ascendente y descendente."""
+    digitos = sorted(str(numero))
+    ascendente = int("".join(digitos))
+    descendente = int("".join(reversed(digitos)))
+    return ascendente, descendente
+
+while True:
+    try:
+        numero = int(input("Ingresa un número de 5 dígitos: "))
+        if 10000 <= numero <= 99999:
+            break
+        else:
+            print("El número debe tener 5 dígitos. Inténtalo de nuevo.")
+    except ValueError:
+        print("Entrada no válida. Inténtalo de nuevo.")
+
+ascendente, descendente = ordenar_numero(numero)
+
+if 10000 <= numero <= 99999:
+  print(f"El número {numero} es de 5 dígitos.")
+  print(f"Ascendente: {ascendente}, Descendente: {descendente}")
+else:
+  print("El número ingresado no es valido")
