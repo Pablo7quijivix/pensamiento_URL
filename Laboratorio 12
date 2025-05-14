@@ -1,0 +1,93 @@
+#Trabajo de laboratorio del dia miercoles 14 de mayo 
+#: Pablo David Quijivix suchi___Carné: "1578125"
+
+# Número de días a registrar
+dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
+#Datos simulados de 1 semana de paciente
+niveles_azucar = [130, 160, 95, 175, 160] # mg/dL
+niveles_sal = [2000, 2400, 1800, 2400, 2700] # mg
+presion = [115, 130, 110, 125, 175] # mmHg
+
+
+
+class DatosSalud:
+    
+    def init(self):
+        self.niveles_azucar = []
+        self.presiones_arteriales = []
+
+    def agregar_dato(self, presiones_arteriales,presiones_simuladas,presion_diastolica, azucar, presion_sistolica ):
+        
+        try:
+            sistolica = int(presion_sistolica)
+            diastolica = int(presion_diastolica)
+            nivel_azucar = int(azucar)
+            if sistolica < 0 or diastolica < 0 or nivel_azucar < 0:
+                raise ValueError("Los valores no pueden ser negativos.")
+            self.presiones_arteriales.append((sistolica, diastolica))
+            self.niveles_azucar.append(nivel_azucar)
+        except ValueError as e:
+            print(f"Error al agregar datos: {e}")
+
+    def clasificar_presion_arterial(self, sistolica, diastolica):
+       
+        if sistolica < 120 and diastolica < 80:
+            return "Normal"
+        elif 120 <= sistolica <= 129 and diastolica < 80:
+            return "Elevada"
+        elif 130 <= sistolica <= 139 or 80 <= diastolica <= 89:
+            return "Hipertensión Etapa 1"
+        elif sistolica >= 140 or diastolica >= 90:
+            return "Hipertensión Etapa 2"
+        else:
+            return "Rango no definido/ rango no encontrado"
+
+    def clasificar_azucar_sangre(self, nivel_azucar):
+       
+        if 70 <= nivel_azucar <= 140:
+            return "Normal"
+        else:
+            return "Fuera del rango saludable"
+
+    def analizar_datos(self):
+        
+        print("\nAnálisis de datos de salud:")
+        for i in range(len(self.niveles_azucar)):
+            try:
+                sistolica, diastolica = self.presiones_arteriales[i]
+                azucar = self.niveles_azucar[i]
+
+                categoria_presion = self.clasificar_presion_arterial(sistolica, diastolica)
+                categoria_azucar = self.clasificar_azucar_sangre(azucar)
+
+                print(f"\nDato {i+1}:")
+                print(f"  Presión Arterial: {sistolica}/{diastolica} mmHg - Categoría: {categoria_presion}")
+                print(f"  Nivel de Azúcar en Sangre: {azucar} mg/dL - Categoría: {categoria_azucar}")
+
+                if categoria_presion != "Normal":
+                    print("  ¡Alerta de presión arterial fuera del rango normal!")
+                    if categoria_presion == "Hipertensión Etapa 2":
+                        print("  Se recomienda buscar atención médica.")
+
+                if categoria_azucar != "Normal":
+                    print("  ¡Alerta de nivel de azúcar en sangre fuera del rango normal!")
+                    print("  Se recomienda monitorear y, si persiste, consultar a un médico.")
+
+            except IndexError:
+                print("Error: No hay suficientes datos para analizar.")
+                break
+
+# Ejemplo de uso con los datos simulados
+datos_paciente = DatosSalud()
+niveles_azucar_simulados = [130, 150, 95, 175, 102]  # mg/dL
+presiones_simuladas = [(115, 70), (140, 92), (125, 78), (160, 105), (130, 85)] # (sistólica, diastólica) mmHg
+
+print("Agregando datos simulados:")
+for i in range(len(niveles_azucar_simulados)):
+    datos_paciente.agregar_dato(presiones_simuladas[i][0], presiones_simuladas[i][1], niveles_azucar_simulados[i], azucar[i], presion_sistolica[i])
+
+datos_paciente.analizar_datos()
+
+# Ejemplo de agregar datos inválidos
+datos_paciente.agregar_dato(-10, 80, 100)
+datos_paciente.agregar_dato("abc", 80, 100)
